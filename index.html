@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中节能实业公司技术月刊（第六期）- 零碳园区与微电网专题</title>
+    
+    <!-- TailwindCSS 3.0+ via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Three.js Library via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom scrollbar for Summer Theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e0f2fe; /* sky-100 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fbbf24; /* amber-400 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b; /* amber-500 */
+        }
+
+        /* Modal backdrop blur effect */
+        .modal-backdrop-custom {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Animation initial state */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        /* State after element enters viewport */
+        .revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Style for the Three.js background canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -20; /* Place it behind everything */
+        }
+    </style>
+</head>
+<!-- THEME CHANGE: Body background and text color updated for summer theme -->
+<body class="bg-gradient-to-br from-sky-200 via-sky-100 to-amber-100 text-slate-800 font-sans antialiased">
+
+    <!-- Three.js Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="root" class="max-w-7xl mx-auto p-4 md:p-8">
+        <main class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+            <!-- Header Card (Final Aligned Layout) -->
+            <!-- THEME CHANGE: Card styles updated for a light, glassy look -->
+            <div id="page-top" class="md:col-span-4 p-8 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl relative overflow-hidden reveal-element">
+                <!-- THEME CHANGE: Decorative blur updated -->
+                <div class="absolute -top-1/4 -right-1/4 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl -z-10"></div>
+                
+                <div class="flex justify-between items-end">
+                    <!-- Left Side: Title & Navigation -->
+                    <div>
+                        <!-- THEME CHANGE: Title gradient updated for dark text -->
+                        <h1 class="text-5xl md:text-6xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-slate-900 to-slate-600">中节能实业公司技术月刊</h1>
+                        <nav class="mt-8">
+                            <ul class="flex justify-start items-center space-x-4 md:space-x-8">
+                                <!-- THEME CHANGE: Nav link colors updated -->
+                                <li><a href="#policy-section" class="text-slate-600 hover:text-amber-500 transition-colors duration-300 font-medium">政策动向</a></li>
+                                <li><a href="#tech-section" class="text-slate-600 hover:text-amber-500 transition-colors duration-300 font-medium">技术动态</a></li>
+                                <li><a href="#case-study-section" class="text-slate-600 hover:text-amber-500 transition-colors duration-300 font-medium">案例分析</a></li>
+                                <li><a href="#conclusion-section" class="text-slate-600 hover:text-amber-500 transition-colors duration-300 font-medium">结语</a></li>
+                                <li><a href="https://nav.tech-monthly.online" target="_blank" class="text-slate-600 hover:text-amber-500 transition-colors duration-300 font-medium">往期月刊</a></li>
+                                <!-- NEW: Podcast button added -->
+                                <li><button id="podcast-btn" class="text-slate-600 hover:text-amber-500 transition-colors duration-300 font-medium">播客</button></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    
+                    <!-- Right Side: Issue Info -->
+                    <div class="relative flex items-end space-x-6">
+                        <div class="text-right flex-shrink-0">
+                            <!-- THEME CHANGE: Accent color updated -->
+                            <div class="text-7xl md:text-8xl font-bold text-amber-500">6</div>
+                            <!-- THEME CHANGE: Text color updated for readability -->
+                            <p class="text-slate-500 text-sm">2025年第6期 / 总第6期</p>
+                            <p class="text-slate-500 text-sm mt-1">技术中心 2025年7月</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Introduction Card -->
+            <div class="md:col-span-4 p-8 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl reveal-element">
+                <!-- THEME CHANGE: Accent color updated -->
+                <h2 class="text-2xl font-semibold text-amber-600 mb-4">本期导言</h2>
+                <!-- THEME CHANGE: Text color updated for readability -->
+                <p class="text-slate-700 leading-relaxed">2025年6月至7月，中国在绿色低碳发展领域迈入了新的历史阶段。这一时期标志着国家“双碳”战略从宏观目标设定，转向具体、可执行的实施框架构建。其中，以零碳园区为核心载体，以园区微电网为关键技术支撑的转型路径日益清晰。</p>
+                <p class="text-slate-700 leading-relaxed mt-4">本期月报旨在深入剖明这一关键转折点下的政策环境、技术前沿与商业模式创新。报告将系统梳理国家层面的纲领性文件，并对比分析江苏、浙江等经济发达省份如何通过差异化的实施方案与激励政策，争夺绿色经济发展制高点。技术层面，本刊将聚焦于支撑零碳园区运行的核心技术——园区微电网以及能够将园区从能源成本中心转变为价值创造单元的虚拟电厂（VPP）技术。通过对最新政策、标准、技术及项目案例的全面剖析，本报告致力于为公司领导层在绿色低碳转型浪潮中把握战略机遇、优化技术布局提供决策参考。</p>
+            </div>
+            
+            <!-- Content Teaser Card (Summarized) -->
+            <div class="md:col-span-4 p-8 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl reveal-element">
+                 <h2 class="text-2xl font-semibold text-amber-600 mb-6">本期亮点</h2>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                     <div class="flex items-start space-x-4">
+                         <div class="text-5xl font-bold text-amber-500">1</div>
+                         <p class="text-slate-700"><strong>国家顶层设计落地</strong>：零碳园区建设进入“有法可依”新阶段。</p>
+                     </div>
+                     <div class="flex items-start space-x-4">
+                         <div class="text-5xl font-bold text-amber-500">2</div>
+                         <p class="text-slate-700"><strong>地方政策竞赛开启</strong>：财政激励与系统规划双管齐下。</p>
+                     </div>
+                     <div class="flex items-start space-x-4">
+                         <div class="text-5xl font-bold text-amber-500">3</div>
+                         <p class="text-slate-700"><strong>微电网成为核心技术底座</strong>：支撑园区能源独立与高效互动。</p>
+                     </div>
+                     <div class="flex items-start space-x-4">
+                         <div class="text-5xl font-bold text-amber-500">4</div>
+                         <p class="text-slate-700"><strong>商业模式从成本转向价值</strong>：虚拟电厂（VPP）重塑园区能源生态。</p>
+                     </div>
+                 </div>
+            </div>
+
+            <!-- Section Title: Policy -->
+            <div id="policy-section" class="md:col-span-4 reveal-element pt-8">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl mt-8 mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-scroll text-amber-500"></i>
+                    一、国家及地方政策动向
+                </h2>
+                <div class="h-1 bg-gradient-to-r from-amber-400/70 to-transparent w-1/3"></div>
+            </div>
+
+            <!-- Policy Cards -->
+            <div class="md:col-span-4 p-6 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl reveal-element flex flex-col">
+                <div class="flex-grow">
+                    <h3 class="font-semibold text-lg text-slate-900">1. 《关于开展零碳园区建设的通知》(发改环资〔2025〕910号)</h3>
+                    <p class="text-sm text-slate-500 mt-1">国家发展和改革委员会、工业和信息化部、国家能源局 | 2025年6月30日</p>
+                    <p class="text-sm text-slate-700 mt-4 leading-6">该通知是国家层面首次系统性地就零碳园区建设发布的指导性文件，旨在支持有条件的地区率先建成一批国家级零碳园区，为全国各类园区的低碳化改造提供样板。文件明确了八大重点任务：</p>
+                    <ul class="list-disc list-inside text-sm text-slate-700 mt-2 leading-6 space-y-1">
+                        <li>加快用能结构转型：加强可再生能源开发，因地制宜发展绿电直连、新能源就近接入增量配电网等模式，科学配置储能，探索氢电耦合。</li>
+                        <li>大力推进节能降碳：建立用能和碳排放管理制度，鼓励企业建设极致能效工厂、零碳工厂。</li>
+                        <li>调整优化产业结构：布局低能耗、高附加值新兴产业，探索“以绿制绿”模式。</li>
+                        <li>强化资源节约集约：促进能量梯级利用、水资源循环利用和废弃物资源化。</li>
+                        <li>完善升级基础设施：系统推进电力、热力、氢能等基础设施改造，新建建筑按超低/近零能耗标准设计。</li>
+                        <li>加强先进技术应用：打造低碳零碳负碳技术示范应用场景，形成商业化解决方案。</li>
+                        <li>提升能碳管理能力：建设覆盖主要用能企业的能碳管理平台，支撑源网匹配调节和电力需求侧管理。</li>
+                        <li>支持园区加强改革创新：鼓励能源综合服务商等各类主体参与，支持园区以虚拟电厂（负荷聚合商）形式参与电力市场。</li>
+                    </ul>
+                    <p class="text-sm text-slate-700 mt-4 leading-6">同时，文件提出了资金、服务和要素三方面的保障措施，包括统筹利用现有资金渠道、鼓励政策性银行信贷支持、支持企业发债，以及在节能审查、碳排放评价、用地用海等方面强化要素保障。</p>
+                </div>
+                <div class="mt-4 flex gap-4">
+                    <button class="modal-trigger text-sm font-semibold text-amber-600 hover:text-amber-500 transition-colors" data-modal-id="policy-1-new">政策解读 <i class="fa-solid fa-magnifying-glass-plus ml-1"></i></button>
+                    <a href="https://www.ndrc.gov.cn/xxgk/zcfb/tz/202507/t20250708_1399055.html" target="_blank" class="text-sm text-slate-500 hover:text-slate-800 transition-colors">信源 <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 p-6 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl reveal-element flex flex-col">
+                <div class="flex-grow">
+                    <h3 class="font-semibold text-lg text-slate-900">2. 《2025年浙江省迎峰度夏电力需求侧管理工作实施方案》通知</h3>
+                    <p class="text-sm text-slate-500 mt-1">浙江省发展和改革委员会（浙发改能源〔2025〕131号） | 2025年6月</p>
+                    <p class="text-sm text-slate-700 mt-4 leading-6">浙江省在2025年夏季来临前，出台了一系列具有高强度激励的电力需求侧管理及VPP补贴政策。其核心特点是补贴力度大、目标明确、覆盖面广。例如，对削峰填谷提供高达4元/千瓦时的补贴。在温州、瑞安等地，对工业企业用户侧储能顶峰放电给予1元/千瓦时的补贴。宁波前湾新区对VPP参与市场化响应，在省级平台成交价基础上再补贴2元/千瓦时。此外，浙江还推出了针对VPP运营商、新型储能企业的年度奖励政策，对VPP聚合平台按调节能力给予50元/千瓦·年的奖励，单个平台每年最高150万元。</p>
+                </div>
+                <div class="mt-4 flex gap-4">
+                    <button class="modal-trigger text-sm font-semibold text-amber-600 hover:text-amber-500 transition-colors" data-modal-id="policy-2-new">政策解读 <i class="fa-solid fa-magnifying-glass-plus ml-1"></i></button>
+                    <a href="https://www.pvmeng.com/2025/06/04/40067/" target="_blank" class="text-sm text-slate-500 hover:text-slate-800 transition-colors">信源 <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+                </div>
+            </div>
+            
+            <div class="md:col-span-2 p-6 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl reveal-element flex flex-col">
+                <div class="flex-grow">
+                    <h3 class="font-semibold text-lg text-slate-900">3. 《无锡市零碳园区建设三年行动方案》及省级标准</h3>
+                    <p class="text-sm text-slate-500 mt-1">无锡市人民政府办公室、江苏省市场监督管理局等 | 2025年6月</p>
+                    <p class="text-sm text-slate-700 mt-4 leading-6">2025年6月30日，无锡市发布《无锡市零碳园区建设三年行动方案（2025-2027年）》，提出到2027年底完成10家以上零碳园区建设，建成10个以上源网荷储一体化项目，培育20家注册虚拟电厂 。方案强调推广“光储直柔”、BIM等技术集成应用，并设定了可再生电力消费占比超30%、终端电气化率超50%等量化目标。此前，江苏省市场监督管理局于6月23日拟批准发布《零碳园区建设指南》地方标准，为省内零碳园区建设提供统一技术框架。</p>
+                </div>
+                <div class="mt-4 flex gap-4">
+                    <button class="modal-trigger text-sm font-semibold text-amber-600 hover:text-amber-500 transition-colors" data-modal-id="policy-3-new">政策解读 <i class="fa-solid fa-magnifying-glass-plus ml-1"></i></button>
+                    <a href="https://www.cinn.cn/p/420888.html" target="_blank" class="text-sm text-slate-500 hover:text-slate-800 transition-colors">信源 <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+                </div>
+            </div>
+
+            <!-- Section Title: Tech & Standards -->
+            <div id="tech-section" class="md:col-span-4 reveal-element pt-8">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl mt-8 mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-microchip text-amber-500"></i>
+                    二、新技术与标准发展动态
+                </h2>
+                <div class="h-1 bg-gradient-to-r from-amber-400/70 to-transparent w-1/3"></div>
+            </div>
+
+            <div class="md:col-span-4 p-8 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl reveal-element">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">1、新发布的技术标准 (中国建筑节能协会)</h3>
+                <div class="space-y-4">
+                    <div class="p-4 border border-slate-200/80 rounded-xl">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-semibold text-slate-800">1.1《零碳园区评价标准（试行）》（T/CABEE 103-2025）</p>
+                                <p class="text-sm text-slate-600 mt-1">该标准于2025年5月15日发布，6月1日起正式实施。它是我国首批系统性定义和评价零碳园区的技术文件之一，其核心贡献在于建立了一套科学、量化的评价框架，为零碳园区的规划、建设和认证提供了统一依据。</p>
+                                <p class="text-sm text-slate-600 mt-2">其适用于新建和既有改造的各类园区，包括工业园区和民用园区。它创新性地提出了低碳、近零碳、零碳园区的三级定义和评价体系。评价指标体系涵盖了园区降碳率、人均碳排放量、单位工业总产值二氧化碳排放等关键量化指标。此外，标准从规划与建筑、能源、市政交通、工业工艺、碳抵消（如绿电交易、碳汇、CCUS）、建造与运营等六大维度，提出了详细的引导性措施和技术要求。</p>
+                                <p class="text-sm text-slate-600 mt-2">该标准的出台，意味着“零碳园区”不再是一个模糊的宣传口号，而是一个有明确技术内涵和量化考核标准的目标。它为政府审批、项目融资、市场认证提供了统一的“度量衡”，有效解决了此前各地标准不一、评价混乱的问题，为行业的健康有序发展奠定了基石。</p>
+                            </div>
+                            <a href="https://www.cenews.com.cn/news.html?aid=1358523" target="_blank" class="flex-shrink-0 ml-4 text-sm text-slate-500 hover:text-slate-800 transition-colors">信源 <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+                        </div>
+                    </div>
+                    <div class="p-4 border border-slate-200/80 rounded-xl">
+                        <div class="flex justify-between items-start">
+                             <div>
+                                <p class="font-semibold text-slate-800">1.2《建筑智能微电网技术标准》（T/CABEE 106—2025）</p>
+                                <p class="text-sm text-slate-600 mt-1">该标准于2025年5月19日发布，7月1日起正式实施。如果说《零碳园区评价标准》定义了“目标”，那么《建筑智能微电网技术标准》则提供了实现这一目标的“核心解决方案”。</p>
+                                <p class="text-sm text-slate-600 mt-2">标准明确定义了代表未来发展方向的第四代（4G）智能微电网，其特征是智能化、柔性化、数字化，并深度融合“源-网-荷-储”一体化。标准详细规定了微电网的拓扑架构、分布式电源（光伏、风电）、建筑荷储（储能、V2B）、微网保护以及管控装置等技术要求。其中最具前瞻性的部分，是第九章对<strong class="text-amber-600">“微网智控平台”</strong>的规定，要求其具备负荷预测、可再生能源发电预测、高级能量管理和需求侧管理等智能化功能。</p>
+                                <p class="text-sm text-slate-600 mt-2">该标准为设计和建设能够满足零碳园区复杂能源需求的新一代微电网提供了权威的技术指引。它强调的不再是简单的设备堆砌，而是以智能控制为核心的系统集成能力，这正是我公司等综合能源服务商的核心竞争力所在。</p>
+                            </div>
+                            <a href="https://www.cabee.org/site/content/25414.html" target="_blank" class="flex-shrink-0 ml-4 text-sm text-slate-500 hover:text-slate-800 transition-colors">信源 <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table 1: Standards Overview -->
+            <div class="md:col-span-4 p-8 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl reveal-element">
+                <p class="text-slate-700 text-sm mb-4">这两项标准的发布并非偶然，它们之间存在着紧密的内在逻辑。T/CABEE 103标准提出的高比例可再生能源利用、能源系统高效运行等要求，必须依赖于T/CABEE 106标准所定义的智能微电网技术才能实现。这种“目标标准”与“技术标准”的协同，构成了一个完整的闭环，为市场参与者提供了从规划设计到工程实施再到评价认证的全流程指导，极大地降低了项目的不确定性，也为我公司设计如“T/CABEE 103达标型”综合能源解决方案提供了强有力的技术背书。</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-4">表1：2025年6-7月零碳园区与微电网核心技术标准概览</h3>
+                <div class="overflow-x-auto">
+                    <table class="table-auto w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100/70">
+                                <th class="px-4 py-2 border border-slate-300 font-semibold text-slate-800">标准/导则名称及编号</th>
+                                <th class="px-4 py-2 border border-slate-300 font-semibold text-slate-800">发布机构</th>
+                                <th class="px-4 py-2 border border-slate-300 font-semibold text-slate-800">生效日期</th>
+                                <th class="px-4 py-2 border border-slate-300 font-semibold text-slate-800">核心目标</th>
+                                <th class="px-4 py-2 border border-slate-300 font-semibold text-slate-800">关键技术要求/指标</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">《零碳园区评价标准（试行）》 T/CABEE 103-2025</td>
+                                <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">中国建筑节能协会</td>
+                                <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">2025年6月1日</td>
+                                <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">建立统一的低碳、近零碳、零碳园区评价体系，引导园区系统性降碳。</td>
+                                <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">园区降碳率、人均碳排放、单位产值碳排放；对规划、能源、建筑、交通、碳抵消（绿电交易、碳汇等）提出引导措施 6。</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">《建筑智能微电网技术标准》 T/CABEE 106—2025</td>
+                                <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">中国建筑节能协会</td>
+                                <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">2025年7月1日</td>
+                                <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">规范和引领建筑智能微电网的设计、建设与运行，实现能源系统智能化、柔性化、数字化。</td>
+                                <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">源网荷储一体化；交直流混合拓扑；微网保护；微网智控平台（负荷预测、高级能量管理、需求侧响应）7。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 p-8 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl reveal-element relative overflow-hidden flex flex-col">
+                <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-amber-400/10 to-transparent -z-10"></div>
+                <div class="flex-grow">
+                    <h3 class="text-xl font-semibold text-slate-900 mb-4">2.1 零碳园区中微电网架构的应用</h3>
+                    <p class="text-sm text-slate-700 leading-6">园区微电网是实现零碳园区的物理基础和能源中枢。它是一个集成了园区内分布式电源（光伏、风电等）、储能系统、可控负荷和基础设施的智能实体，能够实现并网与孤岛模式的无缝切换 。其“大脑”是能量管理系统（EMS），通过先进的算法对“源、网、荷、储”各环节进行实时监控、优化调度和协同控制，以实现能源供需自平衡、提升能源效率、保障供电可靠性和促进可再生能源最大化消纳的目标 。</p>
+                </div>
+                 <button class="modal-trigger-multi mt-6 text-sm font-semibold text-amber-600 hover:text-amber-500 transition-colors self-start" data-modal-type="microgridCases">
+                    查看近期项目案例 <i class="fa-solid fa-layer-group ml-1"></i>
+                </button>
+            </div>
+            
+            <div class="md:col-span-2 p-8 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl reveal-element relative overflow-hidden flex flex-col">
+                <div class="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-orange-400/10 to-transparent -z-10"></div>
+                <div class="flex-grow">
+                    <h3 class="text-xl font-semibold text-slate-900 mb-4">2.2 园区型虚拟电厂（VPP）</h3>
+                    <p class="text-sm text-slate-700 leading-6">虚拟电厂（VPP）是一个基于云平台的智慧能源管理系统，它通过先进的通信和控制技术，将园区内部分散、异构的分布式能源（如屋顶光伏、储能、可中断的工业负荷、电动汽车充放电桩等）聚合打包，形成一个统一、可调度的“虚拟”发电厂，作为一个整体参与电力市场的交易和辅助服务。VPP是激活园区内部资源、实现与大电网互动和价值创造的关键技术。</p>
+                </div>
+                 <button class="modal-trigger-multi mt-6 text-sm font-semibold text-amber-600 hover:text-amber-500 transition-colors self-start" data-modal-type="vppCases">
+                    查看近期项目案例及讨论 <i class="fa-solid fa-layer-group ml-1"></i>
+                </button>
+            </div>
+
+            <!-- Section Title: Case Study -->
+            <div id="case-study-section" class="md:col-span-4 reveal-element pt-8">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl mt-8 mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-chart-pie text-amber-500"></i>
+                    三、案例分析——“光储直柔”微电网赋能零碳园区建设
+                </h2>
+                <div class="h-1 bg-gradient-to-r from-amber-400/70 to-transparent w-1/3"></div>
+            </div>
+            
+            <div class="md:col-span-4 p-8 bg-white/60 backdrop-blur-md border border-white/20 shadow-lg rounded-3xl reveal-element flex flex-col">
+                <div class="flex-grow">
+                    <p class="text-slate-700 leading-relaxed mb-4">山东泰安高新区泰开工业园的柔性微电网项目，为“光储直柔”技术在工业园区的成功应用提供了一个极具说服力的范本。该案例的深度解析，能够清晰地展示这项技术如何解决客户痛点，并创造出可观的经济与环境效益。</p>
+                    <p class="text-slate-700 leading-relaxed mb-6">泰开工业园项目不仅是山东省首个实现“光储直柔”技术规模化应用的工业园区，更是一个从“用电大户”成功转型为“绿电工厂”的典范。</p>
+
+                    <h3 class="text-xl font-semibold text-slate-900 mb-4">1. 项目背景与核心痛点：</h3>
+                    <p class="text-sm text-slate-700 leading-6">作为一家高压开关制造企业，泰开工业园在改造前面临着传统工业用户普遍存在的困境：一是能源成本高昂，每年电费支出高达2100万元，尤其在高峰时段，电价负担沉重；二是供电可靠性依赖于单一的大电网，抗风险能力较弱；三是面临着日益增长的节能降碳压力。</p>
+
+                    <h3 class="text-xl font-semibold text-slate-900 mt-6 mb-4">2. 一体化技术解决方案：</h3>
+                    <p class="text-sm text-slate-700 leading-6">为解决上述痛点，泰开集团没有选择零敲碎打的节能改造，而是采取了系统性的解决方案，建设了一个先进的交直流混合柔性微电网。该方案的成功，关键在于以下几点：</p>
+                    <ul class="list-disc list-inside text-sm text-slate-700 mt-2 leading-6 space-y-2">
+                        <li><strong class="text-amber-600">顶尖的产学研合作：</strong>项目技术落地的最大挑战在于直流供电的安全性和设备兼容性。为此，泰开集团于2022年与清华大学能源互联网创新研究院成立了联合实验室，共同攻克技术瓶颈。这种合作模式确保了项目采用了最前沿的技术，并解决了工程实践中的难题。</li>
+                        <li><strong class="text-amber-600">先进的核心硬件：</strong>项目的“智慧大脑”是由清华大学研发的碳化硅（SiC）电能路由器。相较于传统设备，它能实现交直流电能的快速双向流动，响应速度快30倍，是提升系统效率和灵活性的关键。正是凭借这一核心设备，项目得以将光伏发电直接接入750V低压直流母线，减少了10%的交直流转换损耗，并将光伏自用率从常规的65%一举提升至超过88%。</li>
+                        <li><strong class="text-amber-600">深度的系统集成：</strong>该项目是一个典型的“光储直柔”系统。它集成了屋顶分布式光伏、电化学储能、750V直流配电母线，以及V2G（车网互动）充电设施。整个系统由一个智能控制平台进行统一调度，实现了光伏、储能、电网、柔性负荷以及电动汽车之间的协同优化和能量灵活互动。</li>
+                    </ul>
+
+                    <h3 class="text-lg font-semibold text-slate-900 mt-6 mb-4">表2：山东泰安泰开工业园柔性微电网项目关键绩效指标</h3>
+                    <div class="overflow-x-auto">
+                        <table class="table-auto w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100/70">
+                                    <th class="px-4 py-2 border border-slate-300 font-semibold text-slate-800">关键绩效指标</th>
+                                    <th class="px-4 py-2 border border-slate-300 font-semibold text-slate-800">数值</th>
+                                    <th class="px-4 py-2 border border-slate-300 font-semibold text-slate-800">单位</th>
+                                    <th class="px-4 py-2 border border-slate-300 font-semibold text-slate-800">备注/说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">年节省电费</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">572</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">万元</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">相较于改造前，通过绿电替代和峰谷套利实现。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">年发电量</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">1121</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">万千瓦时</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">来自园区屋顶分布式光伏系统。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">光伏自用率</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">&gt;88%</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">%</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">远高于传统分布式光伏项目（约65%），得益于储能和柔性负荷调度。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">综合用能成本降低</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">&gt;15%</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">%</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">体现了系统整体的经济效益。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">年二氧化碳减排量</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">9300余</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">吨</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">相当于植树48万棵，环境效益显著。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">V2G单车年收益</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">&gt;5000</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">元</td>
+                                    <td class="px-4 py-2 border border-slate-300 text-sm text-slate-700">将新能源汽车作为“移动储能单元”，参与电网调峰获得的收益。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                     <p class="text-slate-700 leading-relaxed mt-6">泰开工业园的案例雄辩地证明，该项目的成功并非停留在概念层面，而是产出了实实在在、可量化的经济和环境效益，为技术的商业化推广提供了强有力的数据支撑。</p>
+                     <p class="text-slate-700 leading-relaxed mt-4">“光储直柔”微电网不仅技术上可行，而且在商业上是成功的。它提供了一个投资回报清晰、多方共赢的解决方案：企业降低了用能成本，提升了绿色形象；电网获得了宝贵的灵活性调节资源，缓解了保供压力；通过V2G等模式，甚至连员工都能从能源转型中获益。这个案例为我公司向潜在客户展示此类项目的价值时，提供了一个极具说服力的“银行级”可信蓝图。</p>
+                </div>
+                <div class="mt-4 flex gap-4">
+                    <a href="https://www.escn.com.cn/news/show-2097768.html" target="_blank" class="text-sm text-slate-500 hover:text-slate-800 transition-colors">信源 <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+                </div>
+            </div>
+
+            <!-- Section Title: Conclusion -->
+            <div id="conclusion-section" class="md:col-span-4 reveal-element pt-8">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl mt-8 mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-flag-checkered text-amber-500"></i>
+                    结语
+                </h2>
+                <div class="h-1 bg-gradient-to-r from-amber-400/70 to-transparent w-1/3 mb-6"></div>
+                <p class="text-slate-700 leading-relaxed">展望未来，行业的竞争焦点将不再是单一设备或技术的优劣，而是设计、投资、建设和运营这些复杂集成系统的综合能力。对于中节能实业公司而言，这三大趋势的汇流，既是挑战，更是实现战略转型的历史性机遇。公司的战略重心应聚焦于成为国内领先的“零碳系统集成商”，通过深度融合智能化的微电网设计、市场化的虚拟电厂运营和系统化的零碳园区开发，为客户提供一体化的绿色低碳解决方案，从而在这场深刻的能源变革中，确立新的核心竞争力，驱动公司下一阶段的高质量发展。</p>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <a href="#page-top" id="scrollTopBtn" class="fixed right-8 top-1/2 -translate-y-1/2 bg-amber-500/80 text-white w-12 h-12 rounded-full hidden items-center justify-center shadow-lg backdrop-blur-sm hover:bg-amber-400 hover:scale-110 transition-all duration-300 z-50">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
+    <!-- Issue Selector Modal -->
+    <div id="issue-modal" class="fixed inset-0 z-[60] items-center justify-center p-4 hidden">
+        <!-- THEME CHANGE: Modal backdrop color -->
+        <div id="issue-modal-backdrop" class="fixed inset-0 bg-sky-900/40 modal-backdrop-custom"></div>
+        <!-- THEME CHANGE: Modal content styles -->
+        <div id="issue-modal-content" class="relative bg-white/80 backdrop-blur-xl border border-white/30 rounded-full shadow-2xl w-96 h-96 flex items-center justify-center transition-transform duration-500 ease-in-out transform -translate-x-full">
+            <button id="issue-modal-close" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition-colors z-10"><i class="fa-solid fa-xmark fa-lg"></i></button>
+            
+             <div id="year-selector-container" class="absolute flex items-center justify-center gap-6">
+                <button id="year-prev-btn" class="text-2xl transition-colors">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span id="year-display" class="text-3xl font-bold text-slate-800 w-28 text-center"></span>
+                <button id="year-next-btn" class="text-2xl transition-colors">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div id="month-wheel" class="absolute w-full h-full">
+                <!-- Months will be generated here by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Standard Modal Structure -->
+    <div id="modal-container" class="fixed inset-0 z-50 items-center justify-center p-4 hidden">
+      <div class="fixed inset-0 bg-sky-900/40 modal-backdrop-custom modal-close"></div>
+      <div id="modal-content-wrapper" class="relative bg-white/90 backdrop-blur-xl border border-white/30 rounded-2xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+        <div class="p-6 md:p-8">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modal-title" class="text-xl font-bold text-amber-600 pr-8"></h3>
+                <button class="modal-close text-slate-500 hover:text-slate-800 transition-colors flex-shrink-0">
+                    <i class="fa-solid fa-xmark fa-lg"></i>
+                </button>
+            </div>
+            <div id="modal-body" class="text-slate-700 leading-relaxed space-y-4">
+                <!-- Content will be injected here -->
+            </div>
+            <div id="modal-footer" class="mt-6 pt-4 border-t border-slate-200/80 hidden">
+                 <!-- Multi-item navigation will be injected here -->
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // --- Data for Modals ---
+        const modalData = {
+            'policy-1': { 
+                title: '《绿电直连发展通知》政策解读',
+                content: `<p>此项政策为企业用户直接采购和使用绿色电力提供了更为清晰的框架和操作指引，有助于提升可再生能源项目的市场化程度。通过允许具备条件的发电企业与用户直接交易，可以减少中间环节，降低用能成本，同时增强企业使用绿电的透明度和可追溯性。对于中节能实业公司而言，这可能为公司参与开发针对特定工业园区或大型企业的定制化绿电供应项目带来新的机遇，特别是在提供综合能源服务的转型过程中。通知中对“清晰物理溯源”的强调，反映出市场对绿电真实性的高度关注，这可能会催生对先进计量、追踪和认证技术的需求。企业在规划此类项目时，不仅要考虑发电技术本身，还需关注如何构建和管理直供线路及配套的溯源体系，这可能成为未来绿电项目的一个重要增值点和竞争优势。</p>`
+            },
+            'policy-2': { 
+                title: '《深化提升“获得电力”服务水平意见》政策解读',
+                content: `<p>该政策的发布，体现了国家层面持续优化电力行业营商环境、提升服务效率的决心，这将直接惠及包括分布式光伏在内的各类电力项目开发者。其中，“用电绿色化”和对分布式新能源消纳能力提升的关注，为可再生能源的进一步发展提供了有力支撑。对于中节能实业公司而言，更为简化的办电流程和更为友好的并网服务，能够有效缩短项目开发周期，降低前期不确定性。特别是政策中提到的大规模农网升级改造投资，为农村地区的分布式光伏项目（如“千家万户沐光行动”相关项目 ）扫除了一个关键的接入障碍。农村地区拥有广阔的屋顶和土地资源，是分布式光伏的重要潜在市场，电网基础设施的改善将显著提升这些地区项目的可行性和经济性，为公司拓展相关市场提供了良好的外部条件。</p>`
+            },
+            'policy-3': { 
+                title: '《分布式光伏发电开发建设管理办法》政策解读',
+                content: `<p>这是指导当前及未来一段时期我国分布式光伏项目开发建设的纲领性文件。其精细化的分类管理和明确的各方责任，有助于规范市场秩序，保障项目质量。对电网承载力评估和“四可”能力的强调，反映出随着分布式光伏规模的快速增长，电网的适应性和项目的可调控性已成为管理部门关注的焦点。对于中节能实业公司而言，深入理解并严格执行该办法是所有分布式光伏项目顺利推进的前提。例如，针对不同类型的工商业分布式光伏项目，其自用电量比例要求、并网电压等级限制等均有差异，这直接影响项目设计和经济效益测算。这种细致入微的监管方式，意味着行业正从粗放式增长向高质量发展转变，要求项目开发者具备更强的专业能力和精细化管理水平，以适应不同场景下的具体规定，确保项目的合规性和盈利能力。</p>`
+            },
+            'policy-4': { 
+                title: '《源网荷储一体化试点实施细则》政策解读',
+                content: `<p>山东省发布的《源网荷储一体化试点实施细则》标志着其在推动能源系统向更高效、灵活和市场化方向转型方面迈出了重要一步。该细则通过清晰界定“就地就近消纳”、“绿电交易”、“虚拟电厂”和“分布式自发自用”四种试点模式，为不同应用场景下的源网荷储项目提供了明确的实施路径和发展指引。</p>
+                         <p><strong>“就地就近消纳”模式：</strong>精准对接了出口型企业等对绿色电力有明确需求的大用户，通过设定不低于2亿千瓦时的新能源消纳能力和50%的新能源电量消纳占比目标，有力推动了可再生能源在本地的高效利用，有助于降低企业用能成本和碳足迹。</p>
+                         <p><strong>“绿电交易”模式：</strong>对项目的技术能力提出了较高要求，包括电力数据实时监控、功率自动控制及数据预测等功能，这不仅将促进相关先进技术的集成应用，也为绿电的规范化、市场化交易奠定了坚实基础。</p>
+                         <p><strong>“虚拟电厂”模式：</strong>是该细则的核心亮点之一。它允许聚合省内不同区域、未纳入统一调度管理的分布式电源、用户侧储能及可调节负荷等资源，作为独立主体参与电力市场交易。这与国家层面大力发展虚拟电厂的导向高度一致，将极大提升电网の灵活性和新能源の接纳能力，并为虚拟电厂运营商探索多元化商业模式创造了广阔空间。聚合资源由虚拟电厂运营商自主管理，也体现了市场化运作の原则。</p>
+                         <p><strong>“分布式自发自用”模式：</strong>则继续巩固和规范了分布式能源最基本の应用形式，鼓励用户侧の能源自给自足。</p>
+                         <p>总体而言，山东省此项细则具有很强の可操作性和前瞻性。它不仅为省内“源网荷储一体化”项目の规范、有序发展提供了坚实の政策保障，也为其他地区探索能源系统转型新路径、构建新型电力系统提供了宝贵の实践经验和借鉴模式，预计将有力促进区域能源结构の持续优化和能源产业の创新发展。</p>`
+            },
+            'policy-5': { 
+                title: '《江苏省绿色建筑发展条例》政策解读',
+                content: `<p>江苏省此举在全国范围内具有领先意义，标志着地方绿色建筑管理从侧重运营阶段节能向覆盖全生命周期的碳排放管控深化。这对建筑材料生产、建筑设计、施工乃至后期运维都将产生深远影响。特别是“产品碳标识认证”和“产品碳足迹管理体系”的提出，将直接引导市场选择低碳建材和产品，为相关绿色产业带来发展机遇。中节能实业公司在江苏区域的项目，必须严格遵守这些新增的碳管理规定，这意味着在项目前期策划和设计阶段就需要进行更详细的碳排放核算和材料碳足迹评估。这既是挑战，也是公司展示其在低碳建筑领域专业能力、推广应用低碳技术的机会，例如优先选用具有碳标签认证的BIPV产品或低碳混凝土等。</p>`
+            },
+            'policy-6': { 
+                title: '《广东省公共机构节能降碳工作安排》政策解读',
+                content: `<p>广东省通过公共机构的示范引领作用，推动分布式光伏等可再生能源的应用。这一方面为分布式光伏项目在公共建筑（如学校、医院、政府办公楼等）の拓展创造了稳定的市场需求；另一方面，鼓励购买绿证也为更大范围内的可再生能源项目提供了间接支持。这种“直接安装”与“间接购买”并举的方式，为公共机构实现绿色能源消费目标提供了灵活性。对于中节能实业公司而言，可以针对广东省公共机构的市场特点，提供包括屋顶光伏勘察设计、投资建设、运营维护以及绿证交易咨询在内的一揽子能源服务方案。</p>`
+            },
+            'policy-7': { 
+                title: '《深圳市BIPV和“光储直柔”建筑试点申报》政策解读',
+                content: `<p>深圳市作为改革开放的前沿阵地，在推动绿色建筑技术创新方面再次走在前列。通过设立专项试点项目，政府旨在鼓励和验证BIPV、“光储直柔”等前沿技术的实际应用效果和推广价值。对于中节能实业公司而言，若在这些领域拥有成熟技术或解决方案，积极参与此类试点项目不仅能获得政策支持和市场认可，更能积累宝贵的项目经验，为后续更大规模的市场推广奠定基础。深圳对这些技术的重视，也预示着其未来可能在新建建筑标准或城市更新项目中对这些技术提出更高要求。</p>`
+            },
+            'policy-8': { 
+                title: '《无锡市零碳园区建设三年行动方案》政策解读',
+                content: `<p>无锡市聚焦产业园区这一重点碳排放单元，提出系统性的零碳转型方案。这为综合能源服务商提供了广阔的市场空间，包括大规模分布式光伏的部署、储能系统的配置、智慧能源管理平台的部署。对实业公司零碳产业园区改造具有很好的借鉴意义，提供了从低碳改造加运营的广阔市场空间。</p>`
+            },
+            // --- NEW POLICIES ---
+            'policy-1-new': {
+                title: '《零碳园区建设通知》政策解读',
+                content: `<p>此项政策的发布，标志着我国的绿色低碳发展战略实现了一次重大范式转移，即从关注单一建筑或单个项目的节能降碳，跃升至对整个产业园区进行系统性、全方位的零碳化重构。这为能源服务行业创造了一个全新的、更高维度的市场空间。通知中明确提出的八大任务，实质上勾勒出了一幅综合能源服务的蓝图，它要求服务商不再是单一技术的提供者，而是能够整合可再生能源、储能、智能电网、能碳管理平台、循环经济乃至产业规划的“零碳系统集成商”。</p><p>对于正在寻求战略转型的实业公司而言，该政策不仅是机遇，更是指引。它为公司指明了一条从传统的节能服务向提供“一揽子零碳园区解决方案”升级的清晰路径。文件中对“能源综合服务商”角色的强调，以及鼓励以“虚拟电厂”形式参与电力市场，直接为公司的业务创新提供了政策背书。这意味着，未来公司可以开发并提供覆盖园区规划、设计、建设、运营全生命周期服务，这是一种价值链更长、附加值更高、客户粘性更强的商业模式，完全契合了公司转型的战略要求。</p>`
+            },
+            'policy-2-new': {
+                title: '《浙江省迎峰度夏电力需求侧管理工作实施方案》政策解读',
+                content: `<p>浙江省的系列政策堪称利用精准、高额的财政激励快速培育新兴市场生态的典范。面对VPP商业模式在初期普遍存在的盈利不确定性问题，浙江省没有停留在口头鼓励，而是直接通过“真金白银”的补贴，为市场参与者提供了清晰、稳定、可预期的收入来源。这种做法极大地降低了VPP运营商和用户侧储能投资者的商业风险，创造了立等可见的商业案例，从而在短时间内迅速激活了市场，推动了大量社会资本投入到电网最需要的灵活调节资源建设中。这种高度务实、以结果为导向的政策制定方式，为其他地区如何将政策意图有效转化为市场行动，提供了宝贵的借鉴。</p>`
+            },
+            'policy-3-new': {
+                title: '《无锡市零碳园区建设三年行动方案》政策解读',
+                content: `<p>江苏省，特别是无锡市，展现了其在零碳转型方面的系统规划能力和标准化引领雄心。与浙江省侧重于市场化激励不同，江苏更注重顶层设计和路径规划。通过设定清晰的量化目标和明确的技术路线图，为市场主体提供了稳定的发展预期和明确的行动方向。将零碳园区建设与源网荷储一体化、虚拟电厂培育深度绑定，体现了其对构建新型电力系统下园区能源生态的深刻理解。省级《建设指南》的推出，更显示出其意图将“江苏经验”标准化、模式化，从而在全国范围的绿色发展竞赛中抢占话语权和制高点。</p>`
+            }
+        };
+
+        const multiItemData = {
+            techCases: [ // Original tech cases
+                {
+                    title: '案例1: 园区厂房——重庆长安汽车渝北工厂20MW光伏车棚项目',
+                    content: `<p>该项目作为重庆市“百万千瓦屋顶分布式光伏”建设行动的一部分，虽早于本报告期，但其模式对当前仍具指导意义。项目利用厂区大规模建设光伏车棚，实现了空间综合利用和“光储充”一体化应用。年发电量约2200万千瓦时，可满足工厂约30%的用电需求，每年节约电费超过1200万元，减少二氧化碳排放约1.8万吨。这一案例充分展示了大型制造企业利用自有闲置空间（如车顶、停车场）建设分布式光伏的巨大潜力，并通过“光储充”模式提升能源自给率、降低运营成本，并实现显著的环保效益。重庆市通过专项行动和创新的金融政策（如“阳光贷”）为这类项目提供了有力支持 ，为其他地区推广类似项目提供了借鉴。</p>`,
+                    link: 'https://www.escn.com.cn/news/show-2107268.html'
+                },
+                {
+                    title: '案例2: 公共基础设施——国网山西大同1.2万户分布式光伏柔性群调群控试点',
+                    content: `<p>国网山西省电力公司于2025年4月宣布成功对大同市1.2万户分布式光伏发电用户实现柔性群调群控，其中3284户具备秒级响应能力。该试点通过提升计量设备采集频率（从15分钟/次缩短至1分钟/次）、在用户侧加装分布式光伏接入单元、打通通信协议并制定差异化调控策略等技术手段，实现了对大规模户用光伏的远程柔性调控 。此项目是解决高比例分布式光伏接入配电网所带来消纳和调控挑战的关键技术示范，直接应用了“分布式光伏接入配电网关键支撑技术”，对于保障电网安全稳定运行、提升新能源消纳水平具有重要意义。</p>`,
+                    link: 'http://www.sx.sgcc.com.cn/homepage/wbw/articles/202504/a1162700.html'
+                },
+                {
+                    title: '案例3: 广西虚拟电厂(VPP)含分布式光伏实时调控技术验证项目',
+                    content: `<p>2025年5月，广西电网公司联合典型的分布式储能和光伏企业，成功完成了虚拟电厂调控平台与分布式资源的实时调控技术验证，聚合容量达2.3MW 。虚拟电厂作为聚合和优化分布式能源（包括分布式光伏）的关键技术手段，其在广西的成功验证，为后续虚拟电厂纳入电网实时调度体系、促进清洁能源高水平消纳奠定了坚实基础。</p>`,
+                    link: 'http://www.gx.xinhuanet.com/20250518/8accc53faaca4e5ea85f3acd44ed4c6f/c.html'
+                }
+            ],
+            gcsfCases: [ // Original gcsfCases
+                {
+                    title: '案例: 特斯联武汉智慧产业园',
+                    content: `<p>该产业园成功部署了“光储直柔”系统，并结合智慧能源管理平台和虚拟电厂（VPP）应用，实现了园区超过50%的用电来自光伏发电，年均碳减排达273吨（光伏部分），通过VPP调峰年节约电费约40万元，减少碳排放约1.5万吨。此案例充分展示了“光储直柔”技术在产业园区应用的综合效益。</p>`,
+                    link: 'https://www.hb.chinanews.com.cn/news/2025/0605/417685.html'
+                }
+            ],
+            analysisCases: [ // Original analysisCases
+                 {
+                    title: '案例解析：国网山西大同1.2万户分布式光伏柔性群调群控试点',
+                    content: `
+                        <img src="https://img.picui.cn/free/2025/06/11/684971aaf4129.jpeg" alt="山西大同大规模地面光伏电站" class="w-full h-auto rounded-lg mb-6 shadow-md object-cover">
+                        <p class="font-semibold text-slate-800">2.1.1、项目背景与规模：</p>
+                        <p class="text-sm text-slate-700">山西省作为我国重要的能源基地，近年来新能源发展迅速，分布式光伏装机规模持续增长。截至2025年3月底，山西分布式光伏装机已达1077万千瓦，占新能源总装机的16.53%。然而，大规模、分散式的户用光伏接入给配电网的安全稳定运行和电量消纳带来了挑战。在此背景下，国网山西省电力公司在大同市选取了1.2万户分布式光伏用户开展柔性群调群控试点，其中3284户实现了秒级响应能力，旨在探索高比例分布式光伏接入下配电网的智能调控和高效消纳新模式。</p>
+                        <p class="font-semibold text-slate-800 mt-4">2.1.2、技术方案深度解析：</p>
+                        <p class="text-sm text-slate-700">该试点的核心在于实现对大量分散户用光伏的协同调控。首先，通过修订《分布式光伏发电项目低压发用电合同》，为用户参与调控提供了合约基础。技术层面，将试点台区的计量设备数据采集频率从常规的15分钟/次提升至1分钟/次，为精准调控和实时反馈提供了数据支撑。在用户侧，加装了分布式光伏接入单元，通过打通通信协议，使电网调度系统能够远程、柔性地调节光伏出力。此外，针对不同用户的特性，制定了分类分级的差异化调控策略，以提升用户侧响应的灵活性和调控的精准性。对于部分接入受限和动态调控困难的区域，还探索将分布式光伏的低压多点并网调整为10千伏单点并网，并通过“多合一”控制终端实现集中调控。</p>
+                        <p class="font-semibold text-slate-800 mt-4">2.1.3、政策驱动与挑战应对：</p>
+                        <p class="text-sm text-slate-700">该项目的实施，是响应国家层面推动新型电力系统建设、提升新能源消纳能力的政策导向。同时也直接回应了《分布式光伏发电开发建设管理办法》中关于电网企业应加强有源配电网规划、建立相应调度运行机制的要求。在实施过程中，可能面临的挑战包括：大量用户侧设备的改造成本和协调难度、通信网络的稳定性和安全性保障、调控策略的优化以及用户对调控的接受度等。通过合同约定、技术升级和差异化策略，项目方正逐步克服这些挑战。</p>
+                        <p class="font-semibold text-slate-800 mt-4">2.1.4、成果影响与启示：</p>
+                        <p class="text-sm text-slate-700">该试点的成功，初步验证了在高密度户用光伏接入区域实施柔性群调群控技术的可行性和有效性，显著提升了配电网对分布式光伏的接纳和调控能力，为其他地区提供了宝贵经验。未来，国网山西电力计划依托负荷管理系统开发低压分布式光伏统一管理模块，构建“监测-指令-调控”机制 ，这将进一步深化技术的应用。对于中节能实业公司而言，此类电网侧主动提升消纳能力和调控水平的举措，为公司在园区开发分布式光伏项目提供了更稳定的外部环境。同时，也启示公司在项目开发中应更加注重系统的智能化和可调控性，以便更好地融入未来以主动配电网和虚拟电厂为特征的电力系统。</p>
+                    `,
+                    link: 'http://www.sx.sgcc.com.cn/homepage/wbw/articles/202504/a1162700.html'
+                },
+                 {
+                    title: '案例解析：重庆“百万千瓦屋顶”行动中的典型工厂“光储充”一体化项目',
+                    content: `
+                        <img src="https://img.picui.cn/free/2025/06/11/684971abc85ce.jpeg" alt="重庆城市屋顶分布式光伏" class="w-full h-auto rounded-lg mb-6 shadow-md object-cover">
+                        <p class="font-semibold text-slate-800">2.2.1、项目背景与模式：</p>
+                        <p class="text-sm text-slate-700">重庆市于2024年6月启动“百万千瓦屋顶分布式光伏”建设行动，目标到2025年底新增并网100万千瓦以上。截至2025年3月，已新增装机120万千瓦。在此行动推动下，涌现了多种创新开发模式，其中“工厂光储充一体化”是针对工业园区和大型制造企业的有效解决方案。以长安汽车渝北工厂20MW光伏车棚项目为例，该项目充分利用厂区空间，建设大规模分布式光伏，并结合储能和充电设施，形成能源生产、存储和消费的闭环。</p>
+                        <p class="font-semibold text-slate-800 mt-4">2.2.2、技术设计与特点：</p>
+                        <p class="text-sm text-slate-700">此类项目的核心是将光伏发电系统、储能系统和电动汽车充电桩进行一体化设计和智能化管理。光伏系统（如长安汽车的20MW车棚光伏）为主要能源来源；储能系统用于平抑光伏出力波动、实现峰谷套利、提供备用电源；充电桩则满足厂区内电动汽车的充电需求。整个系统通过能源管理系统（EMS）进行优化调度，实现能源的自发自用最大化和运营成本的最小化。</p>
+                        <p class="font-semibold text-slate-800 mt-4">2.2.3、经济可行性与商业模式：</p>
+                        <p class="text-sm text-slate-700">项目的经济性主要来源于节省的电费、可能的峰谷电价差收益以及部分地区对储能参与辅助服务的补贴。重庆的案例中提到，长安汽车项目每年可节省电费超过1200万元。商业模式上，除了企业自投自建外，重庆还推广“企业投资+农户屋顶入股”、政府机关引入第三方合同能源管理（EMC）等模式。针对工商业项目，重庆农商行等金融机构推出了“阳光贷”等专项金融产品，降低了项目融资门槛。</p>
+                        <p class="font-semibold text-slate-800 mt-4">2.2.4、政策与金融支持：</p>
+                        <p class="text-sm text-slate-700">重庆市为推动该行动，出台了“1+N”政策组合拳，建立了项目库，并协调解决项目推进中的问题。金融政策创新是其一大亮点，构建了“政银企民”多方协同投融资机制，将符合条件的项目纳入绿色信贷统计范围，并推出了多种“光伏贷”、“碳收益权质押”等金融工具，部分区县还设立了风险补偿基金。</p>
+                        <p class="font-semibold text-slate-800 mt-4">2.2.5、对工业用户的效益与推广价值：</p>
+                        <p class="text-sm text-slate-700">对于工业用户而言，“光储充”一体化项目不仅能显著降低能源成本，提高绿电使用比例，助力企业实现碳减排目标和提升绿色品牌形象，还能在一定程度上提升供电可靠性。该模式在工业园区、大型厂房等场景具有很高的推广价值。实业公司在为园区客户提供能源解决方案时，可充分借鉴重庆的经验，结合客户的具体用能特性和当地政策，设计定制化的“光储充”一体化方案，并协助客户对接相关的金融支持政策。</p>
+                    `,
+                    link: 'https://www.escn.com.cn/news/show-2107268.html'
+                }
+            ],
+            // --- NEW MULTI-ITEM DATA ---
+            microgridCases: [
+                {
+                    title: '案例1: 海南“光储充微电网”近零碳园区示范项目',
+                    content: `<p>2025年6月，海南省正式立项“基于光储充微电网及多维度协同的近零碳园区关键技术研究及应用示范”项目。该项目旨在通过实际工程，验证和示范以智能微电网为核心的近零碳园区技术路径，具有极强的技术前瞻性和示范意义。</p>`,
+                    link: 'https://m.bjx.com.cn/mnews/20250626/1448133.shtml'
+                },
+                {
+                    title: '案例2: 江苏盐城悦达集团与经开区零碳园区战略合作',
+                    content: `<p>2025年6月29日，悦达集团与盐城经济技术开发区签署战略合作协议，共同打造零碳产业园区。双方都指出，将重点推进智能微电网技术应用，通过整合分布式能源（如光伏、风电等）、储能系统及用电负荷，构建高效协同的局部能源网络，提升园区能源自给率与调度灵活性，减少对传统电网的依赖，降低碳排放。同时加速布局虚拟电厂这一新兴业态，通过聚合分布式能源、可控负荷、储能等资源，实现对分散能源的智能化管控和协同优化，提升能源整体利用效率，增强电网稳定性，为园区及外部电网提供灵活的调峰、填谷等服务。</p><p>依托上述绿色节能技术，双方将推动绿色产业在园区内集聚，构建完整的零碳产业生态体系。通过技术协同与产业融合，形成以微电网、虚拟电厂、源网荷储一体化等技术为支撑的绿色能源产业链，助力打造国家级零碳园区，为 “双碳” 目标实现提供技术与实践范本。</p>`,
+                    link: 'https://www.yueda.com/info/3503'
+                },
+                {
+                    title: '案例3: 河南济源经开区源网荷储一体化试点',
+                    content: `<p>济源经开区（玉川产业集聚区）区域内以高耗能企业为主，能源支出占企业总支出比例较大，且此前依赖火电购电，成本高、碳排放压力大，亟需通过能源改革降本增效。</p><p>截至 2025 年 3 月，已建成投运 3 条线路（110 千伏湨鑫线、10 千伏 I/II 玉太线），在建 1 条 110 千伏裴鑫线，服务河南金利金锌、济源钢铁等 11 家工业用户。在增量配网中为有绿电需求的企业设立 “特区”，通过绿电直连实现电量物理溯源，增量配网负责余电兜底消纳，既满足企业绿电需求，又解决大电网中 “弃光弃风” 问题（因新能源装机与消纳不平衡导致的浪费），实现 “自发自用、余电上网”，用能成本下降 20%，年省百万余元。</p>`,
+                    link: 'https://paper.people.com.cn/zgnyb/pc/content/202506/30/content_30083845.html'
+                }
+            ],
+            vppCases: [
+                {
+                    title: '案例1: 浙江首次新型主体市场化电力响应',
+                    content: `<p>浙江省于 2025 年 7 月 8 日首次开展新型主体市场化电力响应的情况，标志着省内虚拟电厂迈入常态化参与电力系统负荷调节新阶段。</p><p>19 家虚拟电厂聚合 265 家二级用户参与此次响应，最大调节负荷达 29 万千瓦。电力领域新型主体具备电力、电量调节能力，有新技术特征和新运营模式，虚拟电厂作为典型代表，能聚合分布式电源、可调节负荷、储能等分散资源，参与电力系统优化和市场交易。</p><p>本次市场化响应涵盖需求确定、交易组织、基线认定、效果评估、费用结算等环节。浙江电力交易中心提前发布公告，确定需求时段为 7 月 8 日 16:00 - 18:00，每半小时一个交易时段，每个时段需求容量 50 万千瓦，吸引 19 家虚拟电厂运营商参与。潮流科技虚拟电厂负责人表示，首次参与响应 3.46 万千瓦时电量，获得 2.7 万余元收益，标志着虚拟电厂从邀约型向市场型转变，为新型主体常态化参与电力市场和获取收益打通了通道。</p>`,
+                    link: 'http://www.zj.xinhuanet.com/20250711/415f3a7d4ee247fa856b61b34a1786cf/c.html'
+                },
+                {
+                    title: '案例2: 虚拟电厂如何赚钱？',
+                    content: `
+                        <img src="https://img.picui.cn/free/2025/06/16/684fcd315e1fe.jpeg" alt="虚拟电厂概念图" class="w-full h-auto rounded-lg mb-6 shadow-md object-cover">
+                        <p>虚拟电厂有四大收益路径和三大商业模式。四大收益路径包括：</p>
+                        <ul class="list-disc list-inside text-sm text-slate-700 mt-2 leading-6 space-y-1">
+                            <li>容量收益，即凭借为电网提供可调节资源的 “待命承诺” 按千瓦每年获取稳定收益，国内江苏、山东等地补贴在 100-300 元 /kW/ 年；</li>
+                            <li>辅助服务收益，通过储能等设备提供调频、调压等服务，响应速度和精度越高收益越可观，如特斯拉南澳虚拟电厂年调频收益超千万澳元；</li>
+                            <li>峰谷套利，利用电力 “时间价值”，储能设备夜间低价充电、白天高价放电赚取差价，接入现货市场后空间更大，浙江现货市场峰谷价差可达 0.5-0.8 元 /kWh；</li>
+                            <li>额外红利，通过节电减碳获取碳积分参与碳交易，特斯拉 2021 年碳积分收入达 18 亿美元，国内部分省市也在探索相关核算模型。</li>
+                        </ul>
+                        <p class="mt-4">三大商业模式中：</p>
+                        <ul class="list-disc list-inside text-sm text-slate-700 mt-2 leading-6 space-y-1">
+                            <li>电网主导型由国家电网等主导，政策资源强但市场化推进慢，代表案例为冀北电力示范项目；</li>
+                            <li>第三方聚合型由技术平台公司主导，轻资产且接入灵活，却缺乏系统调度权限，如特斯拉；</li>
+                            <li>用户联盟型由大型用能企业或园区主导，自有负荷且决策灵活，不过系统集成难度高，如京东 “源网荷储” 系统。</li>
+                        </ul>
+                        <p class="mt-4">国内正从电网主导向多元主体参与过渡，第三方平台与用户联合模式有望成为增长引擎，以 10MW/20MWh 锂电储能项目为例，年净利润约 300-1000 万元，投资回收周期 4-6 年。</p>
+                    `,
+                    link: 'https://mp.weixin.qq.com/s?src=11&timestamp=1752561030&ver=6113&signature=RpUyTu0WiBLtZyIXiCqQi5wiQmTNS1oqILgQmRmOj*5*msuypfPhdwR-xzoaDZjLcuEnukAdY9H2ga*Eidf-OHefqVnxCNrDez4U*HIaE*VCcTSXUB04ulUnRdaS26I&new=1'
+                }
+            ]
+        };
+
+        // --- Standard Modal Logic ---
+        const modalContainer = document.getElementById('modal-container');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalFooter = document.getElementById('modal-footer');
+        let currentMultiItemType = null;
+        let currentMultiItemIndex = 0;
+
+        function openModal() {
+            modalContainer.classList.remove('hidden');
+            modalContainer.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modalContainer.classList.add('hidden');
+            modalContainer.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.modal-trigger').forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modalId = trigger.getAttribute('data-modal-id');
+                const data = modalData[modalId];
+                if (data) {
+                    modalTitle.innerHTML = data.title;
+                    modalBody.innerHTML = data.content;
+                    modalFooter.classList.add('hidden');
+                    openModal();
+                }
+            });
+        });
+
+        document.querySelectorAll('.modal-trigger-multi').forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentMultiItemType = trigger.getAttribute('data-modal-type');
+                currentMultiItemIndex = parseInt(trigger.getAttribute('data-initial-index') || '0');
+                renderMultiItemModal();
+                openModal();
+            });
+        });
+        
+        function renderMultiItemModal() {
+            const items = multiItemData[currentMultiItemType];
+            if (!items || items.length === 0) return;
+            
+            const currentItem = items[currentMultiItemIndex];
+            modalTitle.innerHTML = currentItem.title;
+            modalBody.innerHTML = currentItem.content;
+            
+            if(items.length > 1) {
+                modalFooter.classList.remove('hidden');
+                modalFooter.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <button id="prev-item" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                            <i class="fa-solid fa-arrow-left mr-2"></i>上一个案例
+                        </button>
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-slate-500">${currentMultiItemIndex + 1} / ${items.length}</span>
+                            <a href="${currentItem.link}" target="_blank" class="text-sm text-slate-500 hover:text-slate-800 transition-colors">信源 <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+                        </div>
+                        <button id="next-item" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                            下一个案例<i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                `;
+                
+                const prevBtn = document.getElementById('prev-item');
+                const nextBtn = document.getElementById('next-item');
+                
+                prevBtn.disabled = currentMultiItemIndex === 0;
+                nextBtn.disabled = currentMultiItemIndex === items.length - 1;
+                
+                prevBtn.addEventListener('click', () => {
+                    if (currentMultiItemIndex > 0) {
+                        currentMultiItemIndex--;
+                        renderMultiItemModal();
+                    }
+                });
+                
+                nextBtn.addEventListener('click', () => {
+                    if (currentMultiItemIndex < items.length - 1) {
+                        currentMultiItemIndex++;
+                        renderMultiItemModal();
+                    }
+                });
+            } else {
+                 modalFooter.classList.remove('hidden');
+                 modalFooter.innerHTML = `
+                     <div class="flex justify-end">
+                         <a href="${currentItem.link}" target="_blank" class="text-sm text-slate-500 hover:text-slate-800 transition-colors">信源 <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+                     </div>
+                 `;
+            }
+        }
+        
+        document.querySelectorAll('.modal-close').forEach(el => el.addEventListener('click', closeModal));
+
+        // --- NEW: Podcast Modal Logic ---
+        const podcastBtn = document.getElementById('podcast-btn');
+        if (podcastBtn) {
+            podcastBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modalTitle.innerHTML = '收听本期月刊播客';
+                modalBody.innerHTML = `
+                    <div class="text-center space-y-4">
+                        <p class="text-slate-600">打开喜马拉雅APP或微信，扫下方二维码收听</p>
+                        <!-- UPDATED: QR code link updated -->
+                        <img src="https://img.picui.cn/free/2025/06/16/684fca84bac58.png" alt="播客二维码" class="mx-auto w-48 h-48 rounded-lg shadow-md">
+                        <p class="text-sm text-slate-500">本播客是由AI生成的当期月刊音频版</p>
+                    </div>
+                `;
+                modalFooter.classList.add('hidden'); // Ensure footer with navigation is hidden
+                openModal();
+            });
+        }
+        
+        // --- Scroll to Top Button Logic ---
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollTopBtn.style.display = "flex";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        };
+
+        // --- Scroll Animation Logic ---
+        const revealElements = document.querySelectorAll('.reveal-element');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => observer.observe(el));
+
+        // --- Issue Selector Modal Logic ---
+        const issueSelectorBtnMain = document.getElementById('issue-selector-btn-main'); 
+        const issueModal = document.getElementById('issue-modal');
+        const issueModalContent = document.getElementById('issue-modal-content');
+        const issueModalBackdrop = document.getElementById('issue-modal-backdrop');
+        const issueModalClose = document.getElementById('issue-modal-close');
+        
+        const yearPrevBtn = document.getElementById('year-prev-btn');
+        const yearNextBtn = document.getElementById('year-next-btn');
+        const yearDisplay = document.getElementById('year-display');
+        const monthWheel = document.getElementById('month-wheel');
+
+        const config = {
+            currentYear: 2025,
+            publishedIssues: {
+                2025: [1, 2, 3, 4, 5, 6], // Updated to include issue 6
+            },
+            availableYears: [2025], 
+            currentIssue: 6 // Updated to issue 6
+        };
+
+        let activeYearIndex = config.availableYears.indexOf(config.currentYear);
+        if (activeYearIndex === -1 && config.availableYears.length > 0) {
+            activeYearIndex = 0;
+        }
+
+        function openIssueModal() {
+            issueModal.classList.remove('hidden');
+            issueModal.classList.add('flex');
+            setTimeout(() => {
+                issueModalContent.classList.remove('-translate-x-full');
+            }, 10);
+        }
+
+        function closeIssueModal() {
+            issueModalContent.classList.add('-translate-x-full');
+            setTimeout(() => {
+                issueModal.classList.add('hidden');
+                issueModal.classList.remove('flex');
+            }, 500);
+        }
+
+        if (issueSelectorBtnMain) { // Check if the button exists in the HTML
+            issueSelectorBtnMain.addEventListener('click', openIssueModal);
+        }
+        issueModalBackdrop.addEventListener('click', closeIssueModal);
+        issueModalClose.addEventListener('click', closeIssueModal);
+
+        function updateArrowButtons() {
+            if (!yearPrevBtn || !yearNextBtn) return;
+            // THEME CHANGE: Classes updated for light theme
+            const enabledClasses = ['text-slate-500', 'hover:text-slate-800', 'cursor-pointer'];
+            const disabledClasses = ['text-slate-400', 'cursor-not-allowed'];
+            
+            if (activeYearIndex <= 0) {
+                yearPrevBtn.disabled = true;
+                yearPrevBtn.classList.remove(...enabledClasses);
+                yearPrevBtn.classList.add(...disabledClasses);
+            } else {
+                yearPrevBtn.disabled = false;
+                yearPrevBtn.classList.remove(...disabledClasses);
+                yearPrevBtn.classList.add(...enabledClasses);
+            }
+
+            if (activeYearIndex >= config.availableYears.length - 1) {
+                yearNextBtn.disabled = true;
+                yearNextBtn.classList.remove(...enabledClasses);
+                yearNextBtn.classList.add(...disabledClasses);
+            } else {
+                yearNextBtn.disabled = false;
+                yearNextBtn.classList.remove(...disabledClasses);
+                yearNextBtn.classList.add(...enabledClasses);
+            }
+        }
+
+        function updateYearDisplay() {
+            if (config.availableYears.length > 0) {
+                const selectedYear = config.availableYears[activeYearIndex];
+                yearDisplay.textContent = `${selectedYear}年`;
+                renderMonthWheel(selectedYear);
+                updateArrowButtons();
+            }
+        }
+        
+        yearPrevBtn.addEventListener('click', () => {
+            if (!yearPrevBtn.disabled) {
+                activeYearIndex--;
+                updateYearDisplay();
+            }
+        });
+
+        yearNextBtn.addEventListener('click', () => {
+             if (!yearNextBtn.disabled) {
+                activeYearIndex++;
+                updateYearDisplay();
+            }
+        });
+
+        function renderMonthWheel(year) {
+            monthWheel.innerHTML = '';
+            const radius = 130;
+            const centerX = 192; 
+            const centerY = 192; 
+            for (let i = 1; i <= 12; i++) {
+                const angle = (i - 3) * (Math.PI / 6); 
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                const monthEl = document.createElement('div');
+                monthEl.textContent = i;
+                monthEl.className = 'absolute w-10 h-10 flex items-center justify-center rounded-full text-lg transition-all duration-300 transform -translate-x-1/2 -translate-y-1/2';
+                monthEl.style.left = `${x}px`;
+                monthEl.style.top = `${y}px`;
+                const isPublished = config.publishedIssues[year]?.includes(i);
+                const isCurrentIssue = (year === config.currentYear && i === config.currentIssue);
+                
+                // THEME CHANGE: Month colors updated for light theme
+                if (isCurrentIssue) {
+                    monthEl.classList.add('bg-amber-500', 'text-white', 'font-bold', 'cursor-pointer', 'scale-110');
+                } else if (isPublished) {
+                    monthEl.classList.add('text-slate-800', 'hover:bg-amber-400/50', 'hover:scale-110', 'cursor-pointer');
+                } else {
+                    monthEl.classList.add('text-slate-400', 'cursor-not-allowed');
+                }
+                monthWheel.appendChild(monthEl);
+            }
+        }
+        
+        updateYearDisplay();
+    });
+    </script>
+    
+    <!-- Three.js Background Script for Summer Theme -->
+    <script>
+        let scene, camera, renderer, particles, mouse;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 1;
+
+            const canvas = document.getElementById('bg-canvas');
+            renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            mouse = new THREE.Vector2();
+            document.addEventListener('mousemove', (event) => {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+            
+            createParticles();
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function createParticles() {
+            const particleCount = 8000; 
+            const positions = new Float32Array(particleCount * 3);
+            const velocities = new Float32Array(particleCount * 3);
+            const geometry = new THREE.BufferGeometry();
+            
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                positions[i3] = (Math.random() - 0.5) * 10;
+                positions[i3 + 1] = (Math.random() - 0.5) * 10;
+                positions[i3 + 2] = (Math.random() - 0.5) * 10;
+                velocities[i3] = 0;
+                velocities[i3 + 1] = (Math.random() * 0.001) + 0.0004; 
+                velocities[i3 + 2] = 0;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+
+            const material = new THREE.PointsMaterial({
+                color: 0xffc700, 
+                size: 0.035, 
+                sizeAttenuation: true,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.NormalBlending 
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const positions = particles.geometry.attributes.position.array;
+            const velocities = particles.geometry.attributes.velocity.array;
+
+            for (let i = 0; i < positions.length / 3; i++) {
+                const i3 = i * 3;
+                positions[i3 + 1] += velocities[i3 + 1];
+                if (positions[i3 + 1] > 5) {
+                    positions[i3 + 1] = -5;
+                }
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+            
+            const targetRotationX = mouse.y * 0.1;
+            const targetRotationY = mouse.x * 0.1;
+            particles.rotation.x += (targetRotationX - particles.rotation.x) * 0.05;
+            particles.rotation.y += (targetRotationY - particles.rotation.y) * 0.05;
+            
+            renderer.render(scene, camera);
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+
+</html>
